@@ -170,7 +170,7 @@
 
                         <div class="text-[11px] text-slate-500 bg-slate-100 p-2.5 rounded-lg border border-slate-200/60 flex items-start space-x-2">
                             <i class="fa-solid fa-circle-info text-sky-600 mt-0.5"></i>
-                            <span>O reconhecimento utiliza Inteligência Artificial para extrair nome, empresa, telefone e e-mail. Pode rever todos os campos antes de guardar.</span>
+                            <span>O reconhecimento utiliza IA para extrair dados do cartão e permite classificar o contacto como Potencial Cliente, Cliente ou Fornecedor.</span>
                         </div>
                     </div>
 
@@ -206,6 +206,15 @@
                                 </div>
 
                                 <div>
+                                    <label class="block text-xs font-medium text-slate-700 mb-1">Tipo de Contacto *</label>
+                                    <select id="ai_tipoContacto" required class="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition bg-white font-medium text-slate-800">
+                                        <option value="Potencial Cliente">Potencial Cliente</option>
+                                        <option value="Cliente">Cliente</option>
+                                        <option value="Fornecedor">Fornecedor</option>
+                                    </select>
+                                </div>
+
+                                <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">Empresa</label>
                                     <input type="text" id="ai_empresa" placeholder="ex: Tech Solutions Lda" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
                                 </div>
@@ -220,7 +229,7 @@
                                     <input type="tel" id="ai_telefone" placeholder="ex: +351 912 345 678" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
                                 </div>
 
-                                <div class="sm:col-span-2">
+                                <div>
                                     <label class="block text-xs font-medium text-slate-700 mb-1">E-mail</label>
                                     <input type="email" id="ai_email" placeholder="ex: joao.silva@empresa.pt" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
                                 </div>
@@ -258,16 +267,29 @@
 
         <!-- TAB 2: DIRECTÓRIO DE CONTACTOS REGISTADOS -->
         <section id="sec-contacts" class="hidden space-y-6">
-            <!-- Barra de Pesquisa e Ferramentas -->
+            <!-- Barra de Pesquisa, Filtros e Ferramentas -->
             <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 
-                <!-- Pesquisa em Tempo Real -->
-                <div class="relative flex-1">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="text" id="searchInput" oninput="renderContacts()" placeholder="Pesquisar por nome, empresa, e-mail ou telefone..." class="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
-                    <button onclick="clearSearch()" id="btnClearSearch" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                        <i class="fa-solid fa-xmark text-xs"></i>
-                    </button>
+                <!-- Pesquisa e Filtro de Tipo -->
+                <div class="flex flex-col sm:flex-row items-center gap-3 flex-1">
+                    <!-- Campo de Pesquisa em Tempo Real -->
+                    <div class="relative flex-1 w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="searchInput" oninput="renderContacts()" placeholder="Pesquisar por nome, empresa, e-mail ou telefone..." class="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
+                        <button onclick="clearSearch()" id="btnClearSearch" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+
+                    <!-- Dropdown de Filtro por Tipo de Contacto -->
+                    <div class="w-full sm:w-52">
+                        <select id="typeFilter" onchange="renderContacts()" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 outline-none transition font-medium text-slate-700 cursor-pointer">
+                            <option value="">Todos os Tipos</option>
+                            <option value="Potencial Cliente">Potencial Cliente</option>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Fornecedor">Fornecedor</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Ações de Exportação e Adição rápida -->
@@ -309,7 +331,7 @@
                         <h2 class="text-lg font-bold text-slate-900" id="formManualTitle">Registo Manual de Contacto</h2>
                         <p class="text-xs text-slate-500">Preencha os campos para adicionar um novo contacto à base de dados.</p>
                     </div>
-                    <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg border border-slate-200">
+                    <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg border border-slate-200 font-medium">
                         Manual
                     </span>
                 </div>
@@ -321,6 +343,15 @@
                         <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">Nome Completo *</label>
                             <input type="text" id="manual_nome" required placeholder="Nome do contacto" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Tipo de Contacto *</label>
+                            <select id="manual_tipoContacto" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none bg-white font-medium text-slate-800">
+                                <option value="Potencial Cliente">Potencial Cliente</option>
+                                <option value="Cliente">Cliente</option>
+                                <option value="Fornecedor">Fornecedor</option>
+                            </select>
                         </div>
 
                         <div>
@@ -338,7 +369,7 @@
                             <input type="tel" id="manual_telefone" placeholder="+351 900 000 000" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none">
                         </div>
 
-                        <div class="sm:col-span-2">
+                        <div>
                             <label class="block text-xs font-medium text-slate-700 mb-1">E-mail</label>
                             <input type="email" id="manual_email" placeholder="contacto@empresa.pt" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none">
                         </div>
@@ -387,6 +418,9 @@
                     <div>
                         <h3 id="modalName" class="text-lg font-bold leading-tight">Nome Exemplo</h3>
                         <p id="modalTitle" class="text-xs text-sky-100 mt-0.5">Cargo • Empresa</p>
+                        <div class="mt-2" id="modalBadgeContainer">
+                            <!-- Inserido Badge de Tipo -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -466,7 +500,7 @@
         let pendingCapturedImageBase64 = null;
         let contactToDeleteId = null;
 
-        // Contactos Iniciais para Demonstração (AdSummit 2026 & Clientes)
+        // Contactos Iniciais para Demonstração (Exemplos de Potencial Cliente, Cliente e Fornecedor)
         const sampleContacts = [
             {
                 id: '1',
@@ -477,6 +511,7 @@
                 email: 'roberto@adsummit.pt',
                 website: 'www.adsummit.pt',
                 endereco: 'Porto, Portugal',
+                tipoContacto: 'Potencial Cliente',
                 notas: 'Contacto estabelecido durante o AdSummit 2026.',
                 dataCriacao: new Date().toISOString()
             },
@@ -489,7 +524,21 @@
                 email: 'michael.teixeira@etpc.pt',
                 website: 'www.etpc.pt',
                 endereco: 'Cantanhede, Portugal',
+                tipoContacto: 'Cliente',
                 notas: 'Projeto PED-2026-001 - Gestão Inteligente de Contactos',
+                dataCriacao: new Date().toISOString()
+            },
+            {
+                id: '3',
+                nome: 'Sofia Martins',
+                empresa: 'TechSupply Portugal',
+                cargo: 'Gestora de Conta',
+                telefone: '+351 210 987 654',
+                email: 'sofia.martins@techsupply.pt',
+                website: 'www.techsupply.pt',
+                endereco: 'Lisboa, Portugal',
+                tipoContacto: 'Fornecedor',
+                notas: 'Fornecedor de equipamento informático e licenças de software.',
                 dataCriacao: new Date().toISOString()
             }
         ];
@@ -530,7 +579,7 @@
         // ==========================================
 
         async function startCamera() {
-            stopCamera(); // Garante que qualquer stream anterior é encerrado limposamente
+            stopCamera(); // Encerrar qualquer stream anterior
 
             const video = document.getElementById('cameraVideo');
             const errorContainer = document.getElementById('cameraError');
@@ -540,7 +589,6 @@
             try {
                 errorContainer.classList.add('hidden');
 
-                // Tentar obter a câmara com parâmetros flexíveis
                 let constraints = {
                     video: {
                         facingMode: currentFacingMode,
@@ -553,7 +601,7 @@
                 try {
                     currentStream = await navigator.mediaDevices.getUserMedia(constraints);
                 } catch (errFallback) {
-                    console.warn("Restrição de facingMode falhou, tentando câmara básica:", errFallback);
+                    console.warn("Restrição de facingMode falhou, a usar câmara genérica:", errFallback);
                     currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
                 }
 
@@ -703,7 +751,6 @@
                 document.getElementById('capturedImagePreview').src = pendingCapturedImageBase64;
                 document.getElementById('previewCardSection').classList.remove('hidden');
                 
-                // Habilitar botão de análise se câmara estivesse desligada
                 const btnCapture = document.getElementById('btnCapture');
                 btnCapture.disabled = false;
                 btnCapture.className = "w-full py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white shadow-md flex items-center justify-center space-x-2 transition active:scale-[0.99]";
@@ -718,10 +765,9 @@
             const badge = document.getElementById('ocrStatusBadge');
             badge.classList.remove('hidden');
 
-            // Limpar prefixo base64 (ex: "data:image/jpeg;base64,")
             const base64Pure = base64DataUrl.split(',')[1] || base64DataUrl;
 
-            const systemPrompt = "És um assistente especialista em OCR e extração de informação de cartões de visita comerciais. Extrai os dados do cartão fornecido em formato JSON estrito com as chaves: nome, empresa, cargo, telefone, email, website, endereco, notas.";
+            const systemPrompt = "És um assistente especialista em OCR e extração de informação de cartões de visita comerciais. Extrai os dados do cartão fornecido em formato JSON estrito com as chaves: nome, empresa, cargo, telefone, email, website, endereco, notas e sugere o tipoContacto entre 'Potencial Cliente', 'Cliente' ou 'Fornecedor'.";
             
             const apiKey = ""; // Runtime in-place key automatically injected
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
@@ -752,7 +798,8 @@
                             email: { type: "STRING" },
                             website: { type: "STRING" },
                             endereco: { type: "STRING" },
-                            notas: { type: "STRING" }
+                            notas: { type: "STRING" },
+                            tipoContacto: { type: "STRING" }
                         }
                     }
                 }
@@ -790,6 +837,7 @@
 
         function fillAiForm(data) {
             document.getElementById('ai_nome').value = data.nome || '';
+            document.getElementById('ai_tipoContacto').value = validateTipo(data.tipoContacto);
             document.getElementById('ai_empresa').value = data.empresa || '';
             document.getElementById('ai_cargo').value = data.cargo || '';
             document.getElementById('ai_telefone').value = data.telefone || '';
@@ -797,6 +845,12 @@
             document.getElementById('ai_website').value = data.website || '';
             document.getElementById('ai_endereco').value = data.endereco || '';
             document.getElementById('ai_notas').value = data.notas || 'Lido automaticamente via IA';
+        }
+
+        function validateTipo(tipo) {
+            const valid = ['Potencial Cliente', 'Cliente', 'Fornecedor'];
+            if (valid.includes(tipo)) return tipo;
+            return 'Potencial Cliente';
         }
 
         function clearCapturedImage() {
@@ -807,6 +861,7 @@
 
         function clearAiForm() {
             document.getElementById('formAiContact').reset();
+            document.getElementById('ai_tipoContacto').value = 'Potencial Cliente';
             clearCapturedImage();
         }
 
@@ -821,6 +876,7 @@
             const newContact = {
                 id: Date.now().toString(),
                 nome: nome,
+                tipoContacto: document.getElementById('ai_tipoContacto').value || 'Potencial Cliente',
                 empresa: document.getElementById('ai_empresa').value.trim(),
                 cargo: document.getElementById('ai_cargo').value.trim(),
                 telefone: document.getElementById('ai_telefone').value.trim(),
@@ -861,6 +917,7 @@
                     contacts[index] = {
                         ...contacts[index],
                         nome: nome,
+                        tipoContacto: document.getElementById('manual_tipoContacto').value || 'Potencial Cliente',
                         empresa: document.getElementById('manual_empresa').value.trim(),
                         cargo: document.getElementById('manual_cargo').value.trim(),
                         telefone: document.getElementById('manual_telefone').value.trim(),
@@ -876,6 +933,7 @@
                 const newContact = {
                     id: Date.now().toString(),
                     nome: nome,
+                    tipoContacto: document.getElementById('manual_tipoContacto').value || 'Potencial Cliente',
                     empresa: document.getElementById('manual_empresa').value.trim(),
                     cargo: document.getElementById('manual_cargo').value.trim(),
                     telefone: document.getElementById('manual_telefone').value.trim(),
@@ -903,6 +961,7 @@
             
             document.getElementById('manual_id').value = c.id;
             document.getElementById('manual_nome').value = c.nome || '';
+            document.getElementById('manual_tipoContacto').value = c.tipoContacto || 'Potencial Cliente';
             document.getElementById('manual_empresa').value = c.empresa || '';
             document.getElementById('manual_cargo').value = c.cargo || '';
             document.getElementById('manual_telefone').value = c.telefone || '';
@@ -917,27 +976,52 @@
 
         function cancelManualForm() {
             document.getElementById('manual_id').value = '';
+            document.getElementById('manual_tipoContacto').value = 'Potencial Cliente';
             document.getElementById('formManualContact').reset();
             document.getElementById('formManualTitle').innerText = "Registo Manual de Contacto";
         }
 
         // ==========================================
-        // RENDERIZAÇÃO E PESQUISA DE CONTACTOS
+        // RENDERIZAÇÃO, BADGES E FILTROS
         // ==========================================
+
+        function getTipoBadgeHtml(tipo) {
+            const t = tipo || 'Potencial Cliente';
+            if (t === 'Cliente') {
+                return `<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200/80 shadow-sm">
+                            <i class="fa-solid fa-circle-check text-[9px] text-emerald-600"></i> Cliente
+                        </span>`;
+            } else if (t === 'Fornecedor') {
+                return `<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200/80 shadow-sm">
+                            <i class="fa-solid fa-truck text-[9px] text-purple-600"></i> Fornecedor
+                        </span>`;
+            } else {
+                // Potencial Cliente (Amber)
+                return `<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200/80 shadow-sm">
+                            <i class="fa-solid fa-star text-[9px] text-amber-600"></i> Potencial Cliente
+                        </span>`;
+            }
+        }
 
         function renderContacts() {
             const grid = document.getElementById('contactsGrid');
             const emptyState = document.getElementById('emptyState');
             const searchVal = document.getElementById('searchInput').value.toLowerCase().trim();
+            const selectedType = document.getElementById('typeFilter').value;
             const btnClear = document.getElementById('btnClearSearch');
 
             btnClear.classList.toggle('hidden', searchVal === '');
 
+            // Filtragem combinada: Pesquisa por Texto + Tipo de Contacto
             const filtered = contacts.filter(c => {
-                return (c.nome || '').toLowerCase().includes(searchVal) ||
-                       (c.empresa || '').toLowerCase().includes(searchVal) ||
-                       (c.email || '').toLowerCase().includes(searchVal) ||
-                       (c.telefone || '').toLowerCase().includes(searchVal);
+                const matchesSearch = (c.nome || '').toLowerCase().includes(searchVal) ||
+                                      (c.empresa || '').toLowerCase().includes(searchVal) ||
+                                      (c.email || '').toLowerCase().includes(searchVal) ||
+                                      (c.telefone || '').toLowerCase().includes(searchVal);
+
+                const matchesType = !selectedType || (c.tipoContacto || 'Potencial Cliente') === selectedType;
+
+                return matchesSearch && matchesType;
             });
 
             document.getElementById('badge-contacts-count').innerText = contacts.length;
@@ -952,21 +1036,25 @@
             grid.innerHTML = filtered.map(c => {
                 const initials = getInitials(c.nome);
                 const bgGradient = getRandomGradient(c.id);
+                const badgeHtml = getTipoBadgeHtml(c.tipoContacto);
 
                 return `
                 <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition group flex flex-col justify-between">
                     <div>
-                        <div class="flex items-start justify-between gap-3 mb-3">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-11 h-11 rounded-xl ${bgGradient} text-white font-bold text-sm flex items-center justify-center shadow-sm">
-                                    ${initials}
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-bold text-slate-900 group-hover:text-sky-600 transition line-clamp-1">${escapeHtml(c.nome)}</h4>
-                                    <p class="text-xs text-slate-500 font-medium line-clamp-1">${escapeHtml(c.cargo || 'Contacto Comercial')}</p>
-                                </div>
+                        <!-- Header do Cartão com Badge de Tipo -->
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            ${badgeHtml}
+                            ${c.empresa ? `<span class="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 font-semibold truncate max-w-[120px]">${escapeHtml(c.empresa)}</span>` : ''}
+                        </div>
+
+                        <div class="flex items-start space-x-3 mb-3">
+                            <div class="w-11 h-11 rounded-xl ${bgGradient} text-white font-bold text-sm flex items-center justify-center shadow-sm flex-shrink-0">
+                                ${initials}
                             </div>
-                            ${c.empresa ? `<span class="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 font-semibold truncate max-w-[100px]">${escapeHtml(c.empresa)}</span>` : ''}
+                            <div class="min-w-0 flex-1">
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-sky-600 transition truncate">${escapeHtml(c.nome)}</h4>
+                                <p class="text-xs text-slate-500 font-medium truncate">${escapeHtml(c.cargo || 'Contacto Comercial')}</p>
+                            </div>
                         </div>
 
                         <div class="space-y-1.5 text-xs text-slate-600 border-t border-slate-100 pt-3">
@@ -1021,6 +1109,7 @@
             document.getElementById('modalName').innerText = c.nome;
             document.getElementById('modalTitle').innerText = `${c.cargo || 'Sem Cargo'} ${c.empresa ? '• ' + c.empresa : ''}`;
             document.getElementById('modalAvatar').innerText = getInitials(c.nome);
+            document.getElementById('modalBadgeContainer').innerHTML = getTipoBadgeHtml(c.tipoContacto);
             
             const phoneLink = document.getElementById('modalPhoneLink');
             phoneLink.innerText = c.telefone || 'Não registado';
@@ -1075,9 +1164,10 @@
                 return;
             }
 
-            const headers = ["Nome", "Empresa", "Cargo", "Telefone", "Email", "Website", "Endereco", "Notas"];
+            const headers = ["Nome", "Tipo de Contacto", "Empresa", "Cargo", "Telefone", "Email", "Website", "Endereco", "Notas"];
             const rows = contacts.map(c => [
                 `"${(c.nome || '').replace(/"/g, '""')}"`,
+                `"${(c.tipoContacto || 'Potencial Cliente').replace(/"/g, '""')}"`,
                 `"${(c.empresa || '').replace(/"/g, '""')}"`,
                 `"${(c.cargo || '').replace(/"/g, '""')}"`,
                 `"${(c.telefone || '').replace(/"/g, '""')}"`,
@@ -1100,6 +1190,7 @@
         }
 
         function downloadVCard(contact) {
+            const tipo = contact.tipoContacto || 'Potencial Cliente';
             const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:${contact.nome || ''}
@@ -1108,7 +1199,8 @@ TITLE:${contact.cargo || ''}
 TEL;TYPE=CELL:${contact.telefone || ''}
 EMAIL:${contact.email || ''}
 URL:${contact.website || ''}
-NOTE:${contact.notas || ''}
+CATEGORIES:${tipo}
+NOTE:Tipo: ${tipo} | ${(contact.notas || '').replace(/\n/g, ' ')}
 END:VCARD`;
 
             const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8;' });
@@ -1123,7 +1215,7 @@ END:VCARD`;
         }
 
         // ==========================================
-        // PERSISTÊNCIA EM MEMÓRIA / STORAGE
+        // PERSISTÊNCIA EM MEMÓRIA / LOCALSTORAGE
         // ==========================================
 
         function loadContactsFromStorage() {
